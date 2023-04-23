@@ -8,21 +8,23 @@ int maxSubArray(int* nums, int numsSize){
     if (numsSize == 1) {
         return maximum_sum;
     }
-    
+
     // Iterate through the array and update the current sum
     for (int i = 1; i < numsSize; i++) {
-    // As we iterate through the array, we add the value of the current index
-    // to the current sum, and see; if the value is smaller,
-    // reset the current sum.
-    if (nums[i] > current_sum + nums[i]) {
-        current_sum = nums[i];
-    } else {
-        current_sum += nums[i];
-    }
+        // As we iterate through the array,
+        // we add the value of the current index.
+        // to the current sum, and see; if the value is smaller,
+        // reset the current sum.
+        if (nums[i] > current_sum + nums[i]) {
+            current_sum = nums[i];
+        } else {
+            current_sum += nums[i];
+        }
 
-    // Check if we need to update the maximum sum
-    if (current_sum > maximum_sum) {
-        maximum_sum = current_sum;
-    }
+        // Check if we need to update the maximum sum
+        if (current_sum > maximum_sum) {
+            maximum_sum = current_sum;
+        }
     }
     return  maximum_sum;
+}
