@@ -7,28 +7,34 @@
  */
 struct ListNode* insertionSortList(struct ListNode* head){
 
-    struct ListNode* current = head;
+    // Iterate through the linked list.
+    // Insert current node as needed (current node > next node)
+    //      insert next node by comparing each node from the beginning.
+
+    struct ListNode* curr = head;
     struct ListNode* dummy = (struct ListNode*)malloc(sizeof(struct ListNode));
     dummy->next = head;
 
-    // Iterate through the linked list.
-    while (current && current->next) {
+    while (curr && curr->next) {
 
-        // Check if the current node is greater than the next node.
-        if (current->val > current->next->val) {
-            struct ListNode* previous = dummy;
-            struct ListNode* temp = current->next;
+        if (curr->val > curr->next->val) {
+            struct ListNode* temp = curr->next;
+            struct ListNode* target = dummy;
 
-            // Iterate through the linked list to find the correct position.
-            while (previous->next->val < temp->val) {
-                previous = previous->next;
+            while (temp->val > target->next->val) {
+                target = target->next;
             }
-            current->next = temp->next;
-            temp->next = previous->next;
-            previous->next = temp;
+            curr->next = temp->next;
+            temp->next = target->next;
+            target->next = temp;
+
         } else {
-            current = current->next;
+            curr = curr->next;
         }
     }
-    return dummy->next;
+    struct ListNode* result = dummy->next;
+    free(dummy);
+
+    return result;
+
 }

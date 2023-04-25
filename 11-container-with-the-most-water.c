@@ -1,36 +1,30 @@
 int maxArea(int* height, int heightSize){
 
-    int left_pos = 0;
-    int right_pos = heightSize - 1;
-    int max_area;
+    // Two pointers (left most and right most indices).
+    // Keep track of current maximum.
+    // Iterate by moving the lower bar towards the centre until the two bars meet.
 
-    // When heightSize == 2
-    if (heightSize == 2) {
-        max_area = height[left_pos] * height[right_pos];
-    }
+    int l = 0;
+    int r = heightSize - 1;
+    int max_area = 0;
 
-    // Iterate through all bars by moving the left and right positions.
-    // Move the bar with the least height towards the other bar.
-    // Stop iterating just before the left and right bars meet.
-
-
-    while (left_pos < right_pos) {
-        int current_area;
-        int left_height = height[left_pos];
-        int right_height = height[right_pos];
-        int distance = right_pos - left_pos;
-
-        if (left_height > right_height) {
-            current_area = right_height * distance;
-            right_pos--;
+    while (l < r) {
+        int dist = r - l;
+        int bar_height = 0;
+        if (height[l] > height[r]) {
+            bar_height = height[r];
+            r--;
         } else {
-            current_area = left_height * distance;
-            left_pos++;
+            bar_height = height[l];
+            l++;
         }
 
-        if (current_area > max_area) {
-            max_area = current_area;
+        int area = dist * bar_height;
+
+        if (area > max_area) {
+            max_area = area;
         }
     }
-
     return max_area;
+
+}

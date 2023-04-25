@@ -8,19 +8,25 @@
  */
 bool isValidBST(struct TreeNode* root){
 
-    bool isValidBSTBounds(struct TreeNode* root, int* min, int* max) {
-        if (root == NULL) {
+    // Check each node if it is a:
+    // (1) Left child, value must be less than parent node.
+    // (2) Right child, value must be greater than parent node.
+
+    // Function to check if node is within upper- and lower-bounds.
+    bool isValidSubTree(struct TreeNode* node, int* lower, int* upper) {
+        if (!node) {
             return true;
         }
 
-        // Check if the root node is between min and max values.
-        if ((min != NULL && root->val <= *min) || (max != NULL && root->val >= *max)) {
+        if ((lower != NULL && node->val <= *lower)
+            || (upper != NULL && node->val >= *upper)) {
             return false;
         }
 
-        return isValidBSTBounds(root->left, min, &root->val) && isValidBSTBounds(root->right, &root->val, max);
+        return isValidSubTree(node->left, lower, &node->val)
+            && isValidSubTree(node->right, &node->val, upper);
     }
 
-    // Recursively call the helper function to check the entire tree.
-    return isValidBSTBounds(root, NULL, NULL);
+    return isValidSubTree(root, NULL, NULL);
+
 }

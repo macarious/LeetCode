@@ -6,49 +6,50 @@
  * };
  */
 struct ListNode* mergeKLists(struct ListNode** lists, int listsSize){
-    // Divide and conquer.
 
-    // Base Case 1: no lists are left.
     if (listsSize == 0) {
         return NULL;
     }
 
-    // Base Case 2: 1 list left.
-    if (listsSize == 1 ){
+    if (listsSize == 1) {
         return lists[0];
     }
 
-    // Split k number of lists in half.
-    // Merge them recursively when we have more than two lists.
-    int mid = listsSize / 2;
-    struct ListNode* leftList = mergeKLists(lists, mid);
-    struct ListNode* rightList = mergeKLists(lists + mid, listsSize - mid);
+    // Divide and conquer approach.
+    // Divide the k-number of lists into smaller subproblems (divide in halves).
+    // Merge them back together using merge sort.
 
-    // When we have two lists, we merge the elements.
-    struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2) {
-        // Keep track of the new sorted linked list.
-        struct ListNode dummyNode;
-        dummyNode.next = NULL;
-        struct ListNode* tail = &dummyNode;
+    // Find the midpoint.
+    int m = listsSize / 2;
 
-        while (list1 != NULL && list2 != NULL) {
-        if (list1->val < list2->val) {
-            tail->next = list1;
-            list1 = list1->next;
+    // Merge two linked lists (l1, l2).
+    struct ListNode* merge(struct ListNode* l1, struct ListNode* l2) {
+        // Dummy pointer to store the merged list.
+        // Tail pointer to store the end of the merged list.
+        struct ListNode* dummy = (struct ListNode*)malloc(sizeof(struct ListNode));
+        struct ListNode* tail = dummy;
+
+        while (l1 && l2) {
+            if (l1->val < l2->val) {
+                tail->next = l1;
+                l1 = l1->next;
+            } else {
+                tail->next = l2;
+                l2 = l2->next;
+            }
+            tail = tail->next;
+        }
+
+        if (!l1) {
+            tail->next = l2;
         } else {
-            tail->next = list2;
-            list2 = list2->next;
-        }
-        tail = tail->next;
+            tail->next = l1;
         }
 
-        if (list1 == NULL) {
-            tail->next = list2;
-        } else {
-            tail->next = list1;
-        }
-        return dummyNode.next;
+        struct ListNode* mergedList = dummy->next;
+        free(dummy);
+        return mergedList;
     }
 
-    return mergeTwoLists(leftList, rightList);
+    return merge(mergeKLists(lists, m), mergeKLists(lists + m, listsSize - m));
 }

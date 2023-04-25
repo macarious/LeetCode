@@ -7,39 +7,34 @@
  */
 struct ListNode* deleteDuplicates(struct ListNode* head){
 
-    // Edge case where list has a size of 0 or 1.
-    if (head == NULL || head->next == NULL) {
+    if (!head || !head->next) {
         return head;
     }
 
-    // Keep track of the current node.
-    struct ListNode* current = head;
+    // Iterate through the linked list.
+    // Pointer -- curr, to keep track of the current location.
+    // Pointer -- prev, to keep track of nodes before curr for removal.
 
-    // Keep track of previous node.
-    struct ListNode* previous = NULL;
+    struct ListNode* prev = NULL;
+    struct ListNode* curr = head;
 
-    // Iterate through the linked-list.
-    while (current != NULL) {
-        // Check if current node is unique by comparing with next node.
-        if (current->next != NULL && current->val == current->next->val) {
-            // Move current node to the last duplicate node.
-            while (current->next != NULL && current->val == current->next->val) {
-                current = current->next;
-            }
+    while (curr) {
+        if (curr->next && curr->val == curr->next->val) {
+            while (curr->next && curr->val == curr->next->val) {
+                curr = curr->next;
+            } // curr is at last node of the subsequence.
 
-            // Remove all duplicate values by updating our pointers.
-            // (1) If first node is a duplicate, reassign the head.
-            // (2) Otherwise, append unique node to head.
-            if (previous == NULL) {
-                head = current->next;
+            if (!prev) {
+                head = curr->next;
             } else {
-                previous->next = current->next;
+                prev->next = curr->next;
             }
         } else {
-            // Update previous pointer.
-            previous = current;
+            prev = curr;
         }
-        current = current->next;
+        curr = curr->next;
     }
+
     return head;
+
 }
